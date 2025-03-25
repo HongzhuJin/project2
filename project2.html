@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Double 11th Event Sales</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      font-weight: bold;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #fdfbfb, #ebedee);
+      color: #333;
+    }
+    #home {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .page {
+      background: #fff;
+      padding: 30px;
+      margin: 40px auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      max-width: 900px;
+    }
+    h1 {
+      margin-top: 40px;
+      font-size: 60px;
+      color: #333;
+    }
+    h2 {
+      font-size: 32px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    p.subtitle {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 30px;
+    }
+    button {
+      margin: 10px;
+      padding: 14px 28px;
+      font-size: 20px;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background-color: #27ae60;
+      color: #fff;
+      transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    button:hover {
+      background-color: #219150;
+      transform: scale(1.03);
+    }
+    button:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    #home-buttons button {
+      font-size: 32px;
+      padding: 20px 40px;
+    }
+    .logo-container {
+      margin: 20px auto;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      max-width: 800px;
+      min-height: 120px; 
+    }
+    .draggable {
+      width: 140px;
+      height: 80px;
+      background-color: #27ae60;
+      border-radius: 8px;
+      cursor: move;
+      user-select: none;
+      transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      position: relative; 
+      z-index: 1; 
+    }
+    .draggable:hover {
+      background-color: #219150;
+      transform: scale(1.05);
+    }
+    .drop-container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 40px auto 20px;
+      max-width: 800px;
+    }
+    .dropzone {
+      width: 140px;
+      height: 80px;
+      border: 2px dashed #27ae60;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #fff;
+      transition: border-color 0.3s, transform 0.3s;
+      position: relative;
+    }
+    .dropzone:hover {
+      border-color: #219150;
+      transform: scale(1.05);
+    }
+    .dropzone span {
+      font-size: 22px;
+      color: #999;
+      position: absolute;
+      z-index: 0;
+    }
+    .chart-container {
+      max-width: 600px;
+      margin: 20px auto;
+    }
+    .show-answer-btn {
+      display: block;
+      margin: 20px auto;
+    }
+    .return-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+      background-color: #27ae60;
+      font-size: 14px;
+      padding: 10px 20px;
+      line-height: 1.2;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="home">
+    <h1>
+      Who and What Sold the Most in<br>
+      China's 2024 Double 11 Event?
+    </h1>
+    <p style="color: #27ae60; text-align: justify; font-size: 20px; max-width: 800px; margin: 0 auto;">
+      The Double 11 Shopping Festival is the largest online shopping event in China. It takes place on November 11 each year. Originally started in 2009 by the Chinese e-commerce giant Alibaba as a promotional event, Double 11 has grown into a nationwide shopping phenomenon. During this period, millions of products go on sale across platforms such as Tmall, JD.com, and many others, attracting consumers with large discounts, flash sales, and special campaigns.
+    </p>
+    <p style="margin-top: 20px; font-size: 20px; text-align: center;">
+      So, in 2024, which platforms (Who) and what products (What) have sold the best?
+    </p>
+    <div id="home-buttons">
+      <button id="btn-who">WHO</button>
+      <button id="btn-what">WHAT</button>
+    </div>
+  </div>
+  <div id="who-page" class="page" style="display:none;">
+    <h2>Who Sold the Most in China's 2024 Double 11 Event?</h2>
+    <p class="subtitle">Drag the icons into the boxes below to place them in order</p>
+    <div id="who-logo-container" class="logo-container">
+      <div class="draggable" draggable="true" id="tmall" data-name="Tmall">Tmall</div>
+      <div class="draggable" draggable="true" id="jd" data-name="JD">JD</div>
+      <div class="draggable" draggable="true" id="pdd" data-name="PDD">PDD</div>
+      <div class="draggable" draggable="true" id="douyin" data-name="TikTok">TikTok</div>
+      <div class="draggable" draggable="true" id="kuaishou" data-name="KS">KS</div>
+    </div>
+    <div id="who-drop-container" class="drop-container">
+      <div class="dropzone" data-index="0"><span>1</span></div>
+      <div class="dropzone" data-index="1"><span>2</span></div>
+      <div class="dropzone" data-index="2"><span>3</span></div>
+      <div class="dropzone" data-index="3"><span>4</span></div>
+      <div class="dropzone" data-index="4"><span>5</span></div>
+    </div>
+    <button id="submit-who">Submit</button>
+    <div id="who-result" style="font-size:18px;"></div>
+    <button id="show-answer-who" class="show-answer-btn" style="display:none;">Show Correct Order with Sales</button>
+    <div id="who-chart-container" class="chart-container" style="display:none;">
+      <canvas id="whoChart"></canvas>
+    </div>
+    <button id="back-who" class="return-btn">Return to<br>Homepage</button>
+  </div>
+  <div id="what-page" class="page" style="display:none;">
+    <h2>What Sold the Most in China's 2024 Double 11 Event?</h2>
+    <p class="subtitle">Drag the icons into the boxes below to place them in order</p>
+    <div id="what-item-container" class="logo-container">
+      <div class="draggable" draggable="true" id="appliances" data-name="Household Appliances">Household Appliances</div>
+      <div class="draggable" draggable="true" id="mobile" data-name="Digital Products">Digital Products</div>
+      <div class="draggable" draggable="true" id="clothing" data-name="Clothing">Clothing</div>
+      <div class="draggable" draggable="true" id="skincare" data-name="Makeup Products">Makeup Products</div>
+      <div class="draggable" draggable="true" id="shoes" data-name="Shoes & Bags">Shoes & Bags</div>
+    </div>
+    <div id="what-drop-container" class="drop-container">
+      <div class="dropzone" data-index="0"><span>1</span></div>
+      <div class="dropzone" data-index="1"><span>2</span></div>
+      <div class="dropzone" data-index="2"><span>3</span></div>
+      <div class="dropzone" data-index="3"><span>4</span></div>
+      <div class="dropzone" data-index="4"><span>5</span></div>
+    </div>
+    <button id="submit-what">Submit</button>
+    <div id="what-result" style="font-size:18px;"></div>
+    <button id="show-answer-what" class="show-answer-btn" style="display:none;">Show Correct Order with Sales</button>
+    <div id="what-chart-container" class="chart-container" style="display:none;">
+      <canvas id="whatChart"></canvas>
+    </div>
+    <button id="back-what" class="return-btn">Return to<br>Homepage</button>
+  </div>
+
+  <script>
+    Chart.defaults.font.family = 'Inter';
+    Chart.defaults.font.size = 12;
+    Chart.register({
+      id: 'barValueLabel',
+      afterDatasetsDraw: function(chart) {
+        const ctx = chart.ctx;
+        chart.data.datasets.forEach(function(dataset, datasetIndex) {
+          const meta = chart.getDatasetMeta(datasetIndex);
+          meta.data.forEach(function(element, index) {
+            const value = dataset.data[index];
+            ctx.font = '12px Inter';
+            ctx.fillStyle = '#333';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            const pos = element.tooltipPosition();
+            ctx.fillText(value, pos.x, pos.y - 5);
+          });
+        });
+      }
+    });
+    function allowDrop(event) {
+      event.preventDefault();
+    }
+    function dragStart(event) {
+      event.dataTransfer.setData("text", event.target.id);
+    }
+    function drop(event) {
+      event.preventDefault();
+      var data = event.dataTransfer.getData("text");
+      var draggable = document.getElementById(data);
+      var dropzone = event.currentTarget;
+      if (dropzone.classList.contains("dropzone")) {
+        var existing = dropzone.querySelector(".draggable");
+        if (existing) {
+          if (dropzone.parentElement.id === "who-drop-container") {
+            document.getElementById("who-logo-container").appendChild(existing);
+          } else if (dropzone.parentElement.id === "what-drop-container") {
+            document.getElementById("what-item-container").appendChild(existing);
+          }
+        }
+      }
+      dropzone.appendChild(draggable);
+    }
+    document.querySelectorAll('.draggable').forEach(function(item) {
+      item.addEventListener("dragstart", dragStart);
+    });
+    document.querySelectorAll('.dropzone').forEach(function(zone) {
+      zone.addEventListener("dragover", allowDrop);
+      zone.addEventListener("drop", drop);
+    });
+    document.querySelectorAll('.logo-container').forEach(function(container) {
+      container.addEventListener("dragover", allowDrop);
+      container.addEventListener("drop", drop);
+    });
+    document.getElementById("btn-who").addEventListener("click", function() {
+      document.getElementById("home").style.display = "none";
+      document.getElementById("who-page").style.display = "block";
+    });
+    document.getElementById("btn-what").addEventListener("click", function() {
+      document.getElementById("home").style.display = "none";
+      document.getElementById("what-page").style.display = "block";
+    });
+    document.getElementById("back-who").addEventListener("click", function() {
+      resetPage("who");
+      document.getElementById("who-page").style.display = "none";
+      document.getElementById("home").style.display = "flex";
+      window.scrollTo(0, 0);
+    });
+    document.getElementById("back-what").addEventListener("click", function() {
+      resetPage("what");
+      document.getElementById("what-page").style.display = "none";
+      document.getElementById("home").style.display = "flex";
+      window.scrollTo(0, 0);
+    });
+    function resetPage(type) {
+      if (type === "who") {
+        var container = document.getElementById("who-logo-container");
+        var dropzones = document.querySelectorAll("#who-drop-container .dropzone");
+        dropzones.forEach(function(zone) {
+          var draggable = zone.querySelector(".draggable");
+          if (draggable) { 
+            draggable.style.backgroundColor = "#27ae60";
+            container.appendChild(draggable); 
+          }
+        });
+        document.getElementById("who-result").innerText = "";
+        document.getElementById("show-answer-who").style.display = "none";
+        document.getElementById("who-chart-container").style.display = "none";
+        if(document.getElementById("whoChart")){
+          document.getElementById("whoChart").remove();
+          var canvas = document.createElement("canvas");
+          canvas.id = "whoChart";
+          document.getElementById("who-chart-container").appendChild(canvas);
+        }
+      } else if (type === "what") {
+        var container = document.getElementById("what-item-container");
+        var dropzones = document.querySelectorAll("#what-drop-container .dropzone");
+        dropzones.forEach(function(zone) {
+          var draggable = zone.querySelector(".draggable");
+          if (draggable) { 
+            draggable.style.backgroundColor = "#27ae60";
+            container.appendChild(draggable); 
+          }
+        });
+        document.getElementById("what-result").innerText = "";
+        document.getElementById("show-answer-what").style.display = "none";
+        document.getElementById("what-chart-container").style.display = "none";
+        if(document.getElementById("whatChart")){
+          document.getElementById("whatChart").remove();
+          var canvas = document.createElement("canvas");
+          canvas.id = "whatChart";
+          document.getElementById("what-chart-container").appendChild(canvas);
+        }
+      }
+    }
+    document.getElementById("submit-who").addEventListener("click", function() {
+      var order = [];
+      var dropzones = document.querySelectorAll("#who-drop-container .dropzone");
+      dropzones.forEach(function(zone) {
+        var draggable = zone.querySelector(".draggable");
+        order.push(draggable ? draggable.getAttribute("data-name") : null);
+      });
+      if (order.includes(null)) {
+        document.getElementById("who-result").innerText = "Please fill all the positions";
+        return;
+      }
+      var correctOrder = ["Tmall", "JD", "TikTok", "PDD", "KS"];
+      var isCorrect = order.every(function(name, index) {
+        return name === correctOrder[index];
+      });
+      dropzones.forEach(function(zone, index) {
+        var draggable = zone.querySelector(".draggable");
+        if (draggable) {
+          if (draggable.getAttribute("data-name") === correctOrder[index]) {
+            draggable.style.backgroundColor = "#27ae60";
+          } else {
+            draggable.style.backgroundColor = "darkred";
+          }
+        }
+      });
+      document.getElementById("who-result").innerText = isCorrect ? "The order is correct!" : "The order is wrong!";
+      document.getElementById("show-answer-who").style.display = "block";
+    });
+    document.getElementById("submit-what").addEventListener("click", function() {
+      var order = [];
+      var dropzones = document.querySelectorAll("#what-drop-container .dropzone");
+      dropzones.forEach(function(zone) {
+        var draggable = zone.querySelector(".draggable");
+        order.push(draggable ? draggable.getAttribute("data-name") : null);
+      });
+      if (order.includes(null)) {
+        document.getElementById("what-result").innerText = "Please fill all the positions";
+        return;
+      }
+      var correctOrder = ["Household Appliances", "Digital Products", "Clothing", "Makeup Products", "Shoes & Bags"];
+      var isCorrect = order.every(function(name, index) {
+        return name === correctOrder[index];
+      });
+      dropzones.forEach(function(zone, index) {
+        var draggable = zone.querySelector(".draggable");
+        if (draggable) {
+          if (draggable.getAttribute("data-name") === correctOrder[index]) {
+            draggable.style.backgroundColor = "#27ae60";
+          } else {
+            draggable.style.backgroundColor = "darkred";
+          }
+        }
+      });
+      document.getElementById("what-result").innerText = isCorrect ? "The order is correct!" : "The order is wrong!";
+      document.getElementById("show-answer-what").style.display = "block";
+    });
+    function showChartForWho() {
+      var ctx = document.getElementById('whoChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ["Tmall", "JD", "TikTok", "PDD", "KS"],
+          datasets: [{
+            label: 'Sales (Billion)',
+            data: [11093, 3325, 3325, 281, 138],
+            backgroundColor: "#27ae60",
+            borderColor: "#27ae60",
+            borderWidth: 1,
+            barPercentage: 0.3
+          }]
+        },
+        options: {
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { color: '#000', font: { family: 'Inter', size: 12 } }
+            },
+            y: {
+              grid: { borderDash: [5, 5], drawBorder: true },
+              ticks: { color: '#000', font: { family: 'Inter', size: 12 } },
+              beginAtZero: true
+            }
+          },
+          plugins: {
+            tooltip: { enabled: false },
+            legend: { display: true, labels: { color: '#000', font: { family: 'Inter', size: 12 } } }
+          },
+          elements: { bar: { borderRadius: 4 } }
+        }
+      });
+    }
+    function showChartForWhat() {
+      var ctx = document.getElementById('whatChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: [
+            ["Household", "Appliances"],
+            ["Digital", "Products"],
+            "Clothing",
+            ["Makeup", "Products"],
+            "Shoes & Bags"
+          ],
+          datasets: [{
+            label: 'Sales (Billion)',
+            data: [1930, 1706, 1664, 963, 770],
+            backgroundColor: "#27ae60",
+            borderColor: "#27ae60",
+            borderWidth: 1,
+            barPercentage: 0.3
+          }]
+        },
+        options: {
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { color: '#000', font: { family: 'Inter', size: 12 }, maxRotation: 0, minRotation: 0 }
+            },
+            y: {
+              min: 0,
+              max: 2000,
+              ticks: { stepSize: 400, color: '#000', font: { family: 'Inter', size: 12 } },
+              grid: { borderDash: [5, 5], drawBorder: true }
+            }
+          },
+          plugins: {
+            tooltip: { enabled: false },
+            legend: { display: true, position: 'top', title: { display: false }, labels: { color: '#000', font: { family: 'Inter', size: 12 } } }
+          },
+          elements: { bar: { borderRadius: 4 } }
+        }
+      });
+    }
+
+    document.getElementById("show-answer-who").addEventListener("click", function() {
+      document.getElementById("who-chart-container").style.display = "block";
+      showChartForWho();
+    });
+    document.getElementById("show-answer-what").addEventListener("click", function() {
+      document.getElementById("what-chart-container").style.display = "block";
+      showChartForWhat();
+    });
+  </script>
+</body>
+</html>
